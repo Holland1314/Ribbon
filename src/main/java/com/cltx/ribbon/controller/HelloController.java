@@ -1,5 +1,6 @@
 package com.cltx.ribbon.controller;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +22,7 @@ public class HelloController {
     private LoadBalancerClient loadBalancerClient;
 
     @RequestMapping(value = "/hi")
+    @HystrixCommand(fallbackMethod="hiFallback")
     public String hi(@RequestParam("id") String id) {
 
         // ResponseEntity<String> responseEntity = restTemplate.getForEntity("http://SPRINGBOOT-CLIENT/user", String.class);
@@ -34,4 +36,8 @@ public class HelloController {
         this.loadBalancerClient.choose("SPRINGBOOT-CLIENT");
         return restTemplate.getForEntity("http://SPRINGBOOT-CLIENT/user/findById?id=" + id, String.class).getBody();
     }
+    public String hiFallback(String id){
+        return "hi方法远程调用超市" + id;
+    }
+
 }
