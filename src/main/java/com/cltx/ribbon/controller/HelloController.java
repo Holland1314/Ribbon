@@ -37,7 +37,9 @@ public class HelloController {
         return restTemplate.getForEntity("http://SPRINGBOOT-CLIENT/user/findById?id=" + id, String.class).getBody();
     }
     public String hiFallback(String id){
-        return "hi方法远程调用超市" + id;
+        return "hi方法远程调用超时" + id;
     }
+
+
 
 }
